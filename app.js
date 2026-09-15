@@ -365,3 +365,28 @@ function importarBackup(event) {
     };
     reader.readAsText(event.target.files[0]);
 }
+
+// ==========================================
+// FUNÇÃO MODO FOCO (ESCONDER / REVELAR COLUNAS)
+// ==========================================
+function alternarModoFoco() {
+    const colunasParaOcultar = [2, 3]; 
+    const btn = document.getElementById('btn-modo-foco');
+    const estaAtivo = btn.classList.toggle('btn-foco-ativo');
+
+    if (estaAtivo) {
+        btn.innerHTML = '<i data-lucide="eye"></i> Mostrar Tudo';
+    } else {
+        btn.innerHTML = '<i data-lucide="eye-off"></i> Modo Foco';
+    }
+
+    colunasParaOcultar.forEach(colIndex => {
+        const th = document.querySelector(`th:nth-child(${colIndex})`);
+        if (th) th.classList.toggle('ocultar-coluna');
+
+        const tds = document.querySelectorAll(`td:nth-child(${colIndex})`);
+        tds.forEach(td => td.classList.toggle('ocultar-coluna'));
+    });
+
+    if (window.lucide) lucide.createIcons();
+}
