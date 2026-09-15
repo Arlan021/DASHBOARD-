@@ -744,7 +744,14 @@
                     <button class="btn btn-primary" onclick="salvarFechamento()">
                         <i data-lucide="save"></i> Salvar Fechamento
                     </button>
-                    <button class="btn btn-secondary" onclick="fazerLogout()" title="Sair do painel">
+                    <button class="btn btn-secondary" onclick="exportarBackup()" title="Baixar Backup">
+                        <i data-lucide="download"></i> Backup
+                    </button>
+                    <label class="btn btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Restaurar Backup">
+                        <i data-lucide="upload"></i> Restaurar
+                        <input type="file" accept=".json" onchange="importarBackup(event)" style="display: none;">
+                    </label>
+                    <button class="btn btn-secondary" onclick="fazerLogout()" title="Sair do sistema">
                         <i data-lucide="log-out"></i> Sair
                     </button>
                 </div>
