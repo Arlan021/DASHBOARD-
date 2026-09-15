@@ -3,7 +3,7 @@
 // ==========================================
 const TOKENS_VALIDOS = [
     "arlan",
-    "TOKEN-CLIENTE-01",
+    "neto",
     "TOKEN-CLIENTE-02",
     "123456"
 ];
