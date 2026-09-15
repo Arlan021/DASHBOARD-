@@ -370,7 +370,8 @@ function importarBackup(event) {
 // FUNÇÃO MODO FOCO (ESCONDER / REVELAR COLUNAS)
 // ==========================================
 function alternarModoFoco() {
-    const colunasParaOcultar = [2, 3]; 
+   const colunasParaOcultar = [2, 4]; 
+
     const btn = document.getElementById('btn-modo-foco');
     const estaAtivo = btn.classList.toggle('btn-foco-ativo');
 
@@ -381,10 +382,10 @@ function alternarModoFoco() {
     }
 
     colunasParaOcultar.forEach(colIndex => {
-        const th = document.querySelector(`th:nth-child(${colIndex})`);
+        const th = document.querySelector(`table th:nth-child(${colIndex})`);
         if (th) th.classList.toggle('ocultar-coluna');
 
-        const tds = document.querySelectorAll(`td:nth-child(${colIndex})`);
+        const tds = document.querySelectorAll(`table td:nth-child(${colIndex})`);
         tds.forEach(td => td.classList.toggle('ocultar-coluna'));
     });
 
