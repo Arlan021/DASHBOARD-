@@ -328,3 +328,40 @@ document.addEventListener('keydown', function (e) {
         }
     }
 });
+
+// ==========================================
+// FUNÇÕES DE BACKUP (EXPORTAR E IMPORTAR)
+// ==========================================
+function exportarBackup() {
+    const dados = {
+        historico: localStorage.getItem('dashboard_historico_salvo'),
+        tokenAtivo: localStorage.getItem('user_token_ativo')
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dados));
+    const downloadAnchor = document.createElement('a');
+    const dataAtual = new Date().toISOString().slice(0, 10);
+    
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `backup_dashboard_${dataAtual}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+function importarBackup(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const dados = JSON.parse(e.target.result);
+            if (dados.historico) {
+                localStorage.setItem('dashboard_historico_salvo', dados.historico);
+                alert("Backup restaurado com sucesso!");
+                location.reload();
+            }
+        } catch (err) {
+            alert("Erro ao ler o arquivo de backup!");
+        }
+    };
+    reader.readAsText(event.target.files[0]);
+}
