@@ -8,26 +8,25 @@ function renderTable() {
     let html = '';
 
     for (let i = 1; i <= TOTAL_ROWS; i++) {
-        html += `
-        <tr>
-            <td style="text-align: center; color: var(--text-dim);">${i}</td>
-            <td>
-                <input type="text" class="profile-name" id="name_${i}" placeholder="Depositante ${i}" oninput="calcularTotais()">
-            </td>
-            <td>
-                <input type="number" step="0.01" min="0" id="dep_${i}" placeholder="0,00" oninput="calcularTotais()">
-            </td>
-            <td>
-                <input type="number" step="0.01" min="0" id="bon_${i}" placeholder="0,00" oninput="calcularTotais()">
-            </td>
-            <td>
-                <input type="number" step="0.01" min="0" id="saq_${i}" placeholder="0,00" oninput="calcularTotais()">
-            </td>
-            <td>
-                <input type="number" step="0.01" min="0" id="coop_${i}" placeholder="0,00" oninput="calcularTotais()">
-            </td>
-            <td class="lucro-cell lucro-zero" id="lucro_${i}">R$ 0,00</td>
-        </tr>
+html += `
+            <tr>
+                <td style="text-align: center; color: var(--text-dim);">${i}</td>
+                <td>
+                    <input type="text" class="profile-name" id="name_${i}" data-row="${i}" data-col="1" placeholder="Depositante ${i}" oninput="calcularTotais()">
+                </td>
+                <td>
+                    <input type="number" step="0.01" min="0" id="dep_${i}" data-row="${i}" data-col="2" placeholder="0,00" oninput="calcularTotais()">
+                </td>
+                <td>
+                    <input type="number" step="0.01" min="0" id="bon_${i}" data-row="${i}" data-col="3" placeholder="0,00" oninput="calcularTotais()">
+                </td>
+                <td>
+                    <input type="number" step="0.01" min="0" id="saq_${i}" data-row="${i}" data-col="4" placeholder="0,00" oninput="calcularTotais()">
+                </td>
+                <td>
+                    <input type="number" step="0.01" min="0" id="coop_${i}" data-row="${i}" data-col="5" placeholder="0,00" oninput="calcularTotais()">
+                </td>
+                <td class="lucro-cell lucro-zero" id="lucro_${i}">R$ 0,00</td>
         `;
     }
     tbody.innerHTML = html;
@@ -308,3 +307,24 @@ window.onload = function() {
         abrirLogin();
     }
 };
+// Ação da tecla Enter para pular para a linha de baixo na mesma coluna
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        const activeElement = document.activeElement;
+        
+        if (activeElement && activeElement.tagName === 'INPUT' && activeElement.hasAttribute('data-row')) {
+            e.preventDefault();
+            
+            const currentRow = parseInt(activeElement.getAttribute('data-row'), 10);
+            const currentCol = activeElement.getAttribute('data-col');
+            const nextRow = currentRow + 1;
+
+            const nextInput = document.querySelector(`input[data-row="${nextRow}"][data-col="${currentCol}"]`);
+
+            if (nextInput) {
+                nextInput.focus();
+                nextInput.select();
+            }
+        }
+    }
+});
