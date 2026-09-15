@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="black">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remessa de Contas - Dashboard Financial Pro</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* ==========================================
+           1. CORE VARIABLES & THEMES
+           ========================================== */
+        :root {
+            --bg-base: #090a0f;
+            --bg-surface: #12141c;
+            --bg-card: #181b26;
+            --bg-input: #0f1118;
+            --border-color: #262a3b;
+            --border-light: #32374e;
+            
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.2);
+            
+            --stat-green: #10b981;
+            --stat-green-bg: rgba(16, 185, 129, 0.1);
+            --stat-red: #ef4444;
+            --stat-red-bg: rgba(239, 68, 68, 0.1);
+            --stat-amber: #f59e0b;
+            --stat-amber-bg: rgba(245, 158, 11, 0.1);
+            --stat-purple: #8b5cf6;
+            --stat-purple-bg: rgba(139, 92, 246, 0.1);
+            --stat-cyan: #06b6d4;
+            --stat-cyan-bg: rgba(6, 182, 212, 0.1);
+            
+            --table-header-bg: #1e2230;
+            --table-row-hover: #1f2333;
+            --table-row-alt: #151722;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.6);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="grafite"] {
+            --bg-base: #18181b;
+            --bg-surface: #27272a;
+            --bg-card: #3f3f46;
+            --bg-input: #18181b;
+            --border-color: #52525b;
+            --border-light: #71717a;
+            --text-main: #fafafa;
+            --text-muted: #d4d4d8;
+            --text-dim: #a1a1aa;
+            --table-header-bg: #27272a;
+            --table-row-hover: #3f3f46;
+            --table-row-alt: #202023;
+        }
+
+        [data-theme="cinza"] {
+            --bg-base: #334155;
+            --bg-surface: #1e293b;
+            --bg-card: #0f172a;
+            --bg-input: #1e293b;
+            --border-color: #475569;
+            --border-light: #64748b;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --text-dim: #94a3b8;
+            --table-header-bg: #1e293b;
+            --table-row-hover: #334155;
+            --table-row-alt: #162032;
+        }
+
+        [data-theme="claro"] {
+            --bg-base: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-input: #f8fafc;
+            --border-color: #e2e8f0;
+            --border-light: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-dim: #94a3b8;
+            --accent-primary: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-glow: rgba(37, 99, 235, 0.15);
+            --stat-green: #059669;
+            --stat-green-bg: #ecfdf5;
+            --stat-red: #dc2626;
+            --stat-red-bg: #fef2f2;
+            --stat-amber: #d97706;
+            --stat-amber-bg: #fffbeb;
+            --stat-purple: #7c3aed;
+            --stat-purple-bg: #f5f3ff;
+            --stat-cyan: #0891b2;
+            --stat-cyan-bg: #ecfeff;
+            --table-header-bg: #f8fafc;
+            --table-row-hover: #f1f5f9;
+            --table-row-alt: #f8fafc;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-surface);
+            padding: 16px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            background: var(--accent-primary);
+            color: #fff;
+            padding: 10px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .brand-text p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .controls-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .theme-selector {
+            display: flex;
+            background: var(--bg-base);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            gap: 4px;
+        }
+
+        .theme-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-btn.active, .theme-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-danger {
+            background-color: var(--stat-red-bg);
+            color: var(--stat-red);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: var(--stat-red);
+            color: #fff;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            background: var(--bg-surface);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--border-light);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .metric-card.deposito::before { background-color: var(--stat-amber); }
+        .metric-card.bonus::before { background-color: var(--stat-cyan); }
+        .metric-card.saque::before { background-color: var(--accent-primary); }
+        .metric-card.cooperacao::before { background-color: var(--stat-purple); }
+        .metric-card.lucro::before { background-color: var(--stat-green); }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .metric-icon {
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deposito .metric-icon { background: var(--stat-amber-bg); color: var(--stat-amber); }
+        .bonus .metric-icon { background: var(--stat-cyan-bg); color: var(--stat-cyan); }
+        .saque .metric-icon { background: rgba(59, 130, 246, 0.1); color: var(--accent-primary); }
+        .cooperacao .metric-icon { background: var(--stat-purple-bg); color: var(--stat-purple); }
+        .lucro .metric-icon { background: var(--stat-green-bg); color: var(--stat-green); }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .metric-footer {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+        }
+
+        @media (max-width: 1100px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card-box {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card-box-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .card-box-title {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-toolbar {
+            padding: 12px 20px;
+            background: var(--bg-base);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .platform-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .platform-input-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .input-text {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .input-text:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        .table-responsive {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: var(--table-header-bg);
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.05em;
+            padding: 12px 14px;
+            border-bottom: 2px solid var(--border-color);
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        thead th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--table-row-alt);
+        }
+
+        tbody tr:hover {
+            background: var(--table-row-hover);
+        }
+
+        td {
+            padding: 6px 8px;
+            white-space: nowrap;
+        }
+
+        td:first-child {
+            position: sticky;
+            left: 0;
+            background: inherit;
+            z-index: 5;
+            font-weight: 600;
+        }
+
+        td input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            text-align: right;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        td input.profile-name {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td input:focus {
+            border-color: var(--accent-primary);
+            background: var(--bg-surface);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+            z-index: 2;
+        }
+
+        .lucro-cell {
+            font-weight: 700;
+            text-align: right;
+            padding-right: 14px;
+        }
+
+        .lucro-positive { color: var(--stat-green); }
+        .lucro-negative { color: var(--stat-red); }
+        .lucro-zero { color: var(--text-dim); }
+
+        .sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .summary-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .summary-row.label-bold {
+            font-weight: 700;
+        }
+
+        .summary-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        .caixa-final-box {
+            background: var(--stat-green-bg);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .caixa-final-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--stat-green);
+            margin-bottom: 4px;
+        }
+
+        .caixa-final-val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--stat-green);
+        }
+
+        .history-section {
+            grid-column: 1 / -1;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            padding: 20px;
+        }
+
+        .history-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .history-card:hover {
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .history-date {
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-primary);
+        }
+
+        .btn-delete-hist {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .btn-delete-hist:hover {
+            color: var(--stat-red);
+            background: var(--stat-red-bg);
+        }
+
+        .history-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        .history-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-item-label {
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .history-item-val {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .history-lucro {
+            grid-column: 1 / -1;
+            background: var(--bg-surface);
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .history-lucro-val {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .empty-history {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background: var(--bg-surface);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="brand">
+                <div class="brand-icon">
+                    <i data-lucide="wallet"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>Remessa de Contas</h1>
+                    <p>Dashboard Financial Pro</p>
+                </div>
+            </div>
+
+            <div class="controls-top">
+                <div class="theme-selector">
+                    <button class="theme-btn active" onclick="setTheme('black')">Preto</button>
+                    <button class="theme-btn" onclick="setTheme('grafite')">Grafite</button>
+                    <button class="theme-btn" onclick="setTheme('cinza')">Cinza</button>
+                    <button class="theme-btn" onclick="setTheme('claro')">Claro</button>
+                </div>
+
+                <div class="action-btns">
+                    <button class="btn btn-secondary" onclick="limparTabela()">
+                        <i data-lucide="rotate-ccw"></i> Limpar
+                    </button>
+                    <button class="btn btn-primary" onclick="salvarFechamento()">
+                        <i data-lucide="save"></i> Salvar Fechamento
+                    </button>
+                    <button class="btn btn-secondary" onclick="fazerLogout()" title="Sair do painel">
+                        <i data-lucide="log-out"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD METRICS CARDS -->
+        <div class="dashboard-grid">
+            <div class="metric-card deposito">
+                <div class="metric-header">
+                    <span class="metric-title">Total Depósitos</span>
+                    <div class="metric-icon"><i data-lucide="arrow-down-left"></i></div>
+                </div>
+                <div class="metric-value" id="cardTotalDeposito">R$ 0,00</div>
+                <div class="metric-footer">Total depositado nas contas</div>
+            </div>
+
+            <div class="metric-card bonus">
+                <div class="metric-header">
+                    <span class="metric-title">Total Bônus</span>
+                    <div class="metric-icon"><i data-lucide="gift"></i></div>
+                </div>
+                <div class="metric-value" id="cardTotalBonus">R$ 0,00</div>
+                <div class="metric-footer">Total de bônus creditados</div>
+            </div>
+
+            <div class="metric-card saque">
+                <div class="metric-header">
+                    <span class="metric-title">Total Saques</span>
+                    <div class="metric-icon"><i data-lucide="arrow-up-right"></i></div>
+                </div>
+                <div class="metric-value" id="cardTotalSaque">R$ 0,00</div>
+                <div class="metric-footer">Total sacado das contas</div>
+            </div>
+
+            <div class="metric-card cooperacao">
+                <div class="metric-header">
+                    <span class="metric-title">Total Cooperação</span>
+                    <div class="metric-icon"><i data-lucide="handshake"></i></div>
+                </div>
+                <div class="metric-value" id="cardTotalCooperacao">R$ 0,00</div>
+                <div class="metric-footer">Valores recebidos por conta</div>
+            </div>
+
+            <div class="metric-card lucro">
+                <div class="metric-header">
+                    <span class="metric-title">Lucro Líquido</span>
+                    <div class="metric-icon"><i data-lucide="trending-up"></i></div>
+                </div>
+                <div class="metric-value" id="cardLucroLiquido">R$ 0,00</div>
+                <div class="metric-footer">(Saques + Cooperação) - Depósitos</div>
+            </div>
+        </div>
+
+        <!-- MAIN LAYOUT -->
+        <div class="main-layout">
+            <!-- LEFT: 100 DEPOSITANTES TABLE -->
+            <div class="card-box">
+                <div class="card-box-header">
+                    <div class="card-box-title">
+                        <i data-lucide="users"></i> Tabela de Remessa de Contas (100 Depositantes)
+                    </div>
+                </div>
+
+                <div class="table-toolbar">
+                    <div class="platform-input-group">
+                        <label for="platformName">Plataforma:</label>
+                        <input type="text" id="platformName" class="input-text" placeholder="Ex: CPA Pro / Casino / Bet" value="CPA Pro">
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-dim);">
+                        Preencha os valores para calcular automaticamente.
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th style="min-width: 170px;">Nome / Perfil</th>
+                                <th style="min-width: 120px; text-align: right;">Depósito (R$)</th>
+                                <th style="min-width: 110px; text-align: right;">Bônus (R$)</th>
+                                <th style="min-width: 120px; text-align: right;">Saque (R$)</th>
+                                <th style="min-width: 130px; text-align: right;">Cooperação (R$)</th>
+                                <th style="min-width: 130px; text-align: right;">Lucro (R$)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="depositantesTableBody">
+                            <!-- Gerado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- RIGHT: RESUMO DE CAIXA -->
+            <div class="sidebar-right">
+                <div class="summary-card">
+                    <h3 style="font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="pie-chart"></i> Resumo Financeiro
+                    </h3>
+                    <div class="summary-divider"></div>
+                    <div class="summary-row">
+                        <span style="color: var(--text-muted);">Soma Depósitos:</span>
+                        <span id="summaryDeposito" style="font-weight: 700; color: var(--stat-amber);">R$ 0,00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span style="color: var(--text-muted);">Soma Bônus:</span>
+                        <span id="summaryBonus" style="font-weight: 700; color: var(--stat-cyan);">R$ 0,00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span style="color: var(--text-muted);">Soma Saques:</span>
+                        <span id="summarySaque" style="font-weight: 700; color: var(--accent-primary);">R$ 0,00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span style="color: var(--text-muted);">Soma Cooperação:</span>
+                        <span id="summaryCooperacao" style="font-weight: 700; color: var(--stat-purple);">R$ 0,00</span>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-row label-bold">
+                        <span>Resultado Parcial:</span>
+                        <span id="summaryLucro" style="font-size: 1.1rem; color: var(--stat-green);">R$ 0,00</span>
+                    </div>
+                    <div class="summary-divider"></div>
+
+                    <div class="caixa-final-box">
+                        <div class="caixa-final-title">Caixa Final Líquido</div>
+                        <div class="caixa-final-val" id="caixaFinal">R$ 0,00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORICO SECTION -->
+            <div class="card-box history-section">
+                <div class="card-box-header">
+                    <div class="card-box-title">
+                        <i data-lucide="history"></i> Histórico de Fechamentos Salvos
+                    </div>
+                    <button class="btn btn-danger" onclick="limparHistorico()" style="padding: 6px 12px; font-size: 0.75rem;">
+                        <i data-lucide="trash-2"></i> Limpar Histórico
+                    </button>
+                </div>
+                <div class="history-grid" id="historyGrid">
+                    <div class="empty-history">Nenhum fechamento salvo até o momento.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- MODAL DE AUTENTICAÇÃO POR TOKEN -->
+    <div id="loginOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: Arial, sans-serif;">
+      <div style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 360px; width: 90%; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <h2 style="margin-bottom: 20px; color: #1a1a1a; font-size: 20px;">Acesso Restrito</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Digite seu Token de Acesso para continuar</p>
+        
+        <input type="text" id="loginToken" placeholder="Insira seu Token aqui" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 14px; text-align: center;">
+        
+        <button onclick="validarToken()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer;">Acessar Dashboard</button>
+        
+        <p id="loginError" style="color: #dc3545; font-size: 13px; margin-top: 15px; display: none;"></p>
+      </div>
+    </div>
+
+    <!-- SCRIPTS EXTERNOS -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
